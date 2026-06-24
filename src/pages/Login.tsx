@@ -1,14 +1,17 @@
 import { useState } from "react";
-import logo from "../assets/logo.png";
+import { useTheme } from "../context/ModeContext";
+import logoClaro from "../assets/logo claro.png";
+import logoOscuro from "../assets/logo oscuro.png";
 import { getUsers } from "../services/api";
 import { useUser } from "../context/userContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
   const [errores, setErrores] = useState<Record<string, string>>({});
   const [enviado, setEnviado] = useState(false);
+  const { tema } = useTheme();
   const { login } = useUser();
   const navigate = useNavigate();
 
@@ -46,8 +49,12 @@ export default function Login() {
       setEnviado(true);
       login({ id: usuario.id, nickName: usuario.nickname });
       navigate("/");
-    } catch {
-      setErrores({ nickName: "Error de conexión con el servidor" });
+    } catch (error) {
+      const mensaje =
+        error instanceof Error
+          ? error.message
+          : "Error de conexión con el servidor";
+      setErrores({ errorServer: mensaje });
     }
   }
 
@@ -55,12 +62,16 @@ export default function Login() {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-2xl px-10 py-12">
         <div className="flex flex-col items-center mb-8">
-          <img src={logo} alt="Logo" className="w-20 h-20 mb-4" />
+          <img
+            src={tema === "light" ? logoOscuro : logoClaro}
+            alt="Logo"
+            className="w-20 h-20 mb-4"
+          />
           <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
             Iniciar sesión
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            UnaHur Anti-Social Net
+            UNaHur Anti-Social Net
           </p>
         </div>
 
@@ -116,6 +127,9 @@ export default function Login() {
               ¡Inicio de sesión exitoso!
             </p>
           )}
+          {errores.errorServer && (
+            <p className="text-red-500 text-center">{errores.errorServer}</p>
+          )}
 
           <button
             type="submit"
@@ -127,12 +141,25 @@ export default function Login() {
           <div className="text-center">
             <button
               type="button"
-              className="text-sm text-blue-600 hover:text-blue-800 hover:underline transition-all duration-200 cursor-pointer bg-transparent border-none"
+              className="text-sm font-bold text-blue-600 hover:text-blue-800 hover:underline transition-all duration-200 cursor-pointer bg-transparent border-none"
             >
               ¿Olvidaste tu contraseña?
             </button>
           </div>
         </form>
+        <div className="text-center mt-5">
+          <button
+            type="button"
+            className="text-sm text-gray-900 dark:text-gray-100 bg-transparent border-none"
+          >
+            ¿No tienes cuenta?{" "}
+            <Link to="/register">
+              <p className="text-sm text-blue-600 hover:text-blue-800 underline transition-all duration-200 cursor-pointer bg-transparent border-none">
+                Registrate
+              </p>
+            </Link>
+          </button>
+        </div>
       </div>
     </div>
   );

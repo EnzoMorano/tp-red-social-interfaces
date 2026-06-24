@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ModeContext";
 import { useUser } from "../context/userContext";
 import {
@@ -10,19 +10,26 @@ import {
   FiChevronDown,
   FiEdit,
 } from "react-icons/fi";
-import logo from "../assets/logo.png";
+import logoClaro from "../assets/logo claro.png";
+import logoOscuro from "../assets/logo oscuro.png";
 
 function Header() {
+  const location = useLocation();
   const { tema, toggleTema } = useTheme();
   const { user, logout } = useUser();
   const [notifAbierto, setNotifAbierto] = useState(false);
   const [menuAbierto, setMenuAbierto] = useState(false);
 
+  useEffect(() => {
+    setNotifAbierto(false);
+    setMenuAbierto(false);
+  }, [location.pathname]);
+
   return (
     <header className="bg-white dark:bg-gray-900 shadow-md">
       <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
         <Link to="/">
-          <img src={logo} alt="Logo" className="w-10 h-10 object-contain" />
+          <img src={tema === "light" ? logoOscuro : logoClaro} alt="Logo" className="w-10 h-10 object-contain" />
         </Link>
 
         <div className="flex items-center gap-4">
@@ -78,9 +85,12 @@ function Header() {
               >
                 Iniciar sesión
               </Link>
-              <button className="px-4 py-1.5 border border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-800 text-sm font-semibold rounded-lg cursor-pointer">
+              <Link
+                to="/register"
+                className="px-4 py-1.5 border border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-800 text-sm font-semibold rounded-lg cursor-pointer"
+              >
                 Registrate
-              </button>
+              </Link>
             </>
           )}
 
