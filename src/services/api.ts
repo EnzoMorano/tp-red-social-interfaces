@@ -1,3 +1,5 @@
+import type { Post } from "../interfaces/types";
+
 const API_URL = "http://localhost:3000";
 
 export async function getUsers() {
@@ -22,4 +24,13 @@ export async function createUser(userData: {
     throw new Error(error.message || "No se pudo crear el usuario");
   }
   return res.json();
+}
+
+// ------------------
+export async function getPosts(): Promise<Post[]> {
+  const res = await fetch(`${API_URL}/posts`);
+  if (!res.ok) throw new Error("Error al obtener las publicaciones");
+  
+  const data = await res.json();
+  return data.posts || data;
 }

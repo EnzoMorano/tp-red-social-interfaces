@@ -4,6 +4,8 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import { Home } from "./pages/Home";
+
 
 function App() {
   return (
@@ -12,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Home />} />
       </Routes>
       <Footer /> {/* Se mantiene fijo en todas las páginas */}
     </>
