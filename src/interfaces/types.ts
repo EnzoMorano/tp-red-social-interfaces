@@ -6,6 +6,34 @@ export interface User {
 }
 
 export interface Post {
+  id: number;
   descripcion: string;
-  userNickname: string;
+  fecha?: string;
+  user?: PostUser;
+  images?: PostImage[];
+  tags?: PostTag[];
+  comments?: PostComment[];
+}
+
+export interface PostUser {
+  nickname: string;
+  nombre?: string;
+  apellido?: string;
+}
+
+export interface PostImage {
+  url: string;
+}
+
+export interface PostTag {
+  id: number;
+  nombre: string;
+}
+
+export interface PostComment {
+  id: number;
+  descripcion: string;
+  fecha: string;
+  userId: number;
+  postId: number;
 }

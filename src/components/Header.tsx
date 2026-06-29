@@ -40,6 +40,13 @@ function Header() {
                 Crear post
               </button>
 
+              <Link
+                to="/profile"
+                className="px-4 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 text-sm font-semibold rounded-lg cursor-pointer"
+              >
+                Perfil
+              </Link>
+
               <div className="relative">
                 <button
                   onClick={() => setNotifAbierto(!notifAbierto)}
@@ -65,7 +72,7 @@ function Header() {
                   <FiChevronDown className="text-xs" />
                 </button>
                 {menuAbierto && (
-                  <div className="absolute right-0 top-full mt-2">
+                  <div className="absolute right-0 top-full mt-2 space-y-2">
                     <button
                       onClick={logout}
                       className="flex items-center gap-2 px-4 py-2 text-red-600 dark:text-red-500 hover:text-red-700 bg-white dark:bg-gray-800 text-sm font-semibold rounded-lg shadow-lg cursor-pointer whitespace-nowrap"

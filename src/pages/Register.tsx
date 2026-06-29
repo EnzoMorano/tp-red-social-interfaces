@@ -63,7 +63,7 @@ export default function Register() {
 
       setEnviado(true);
 
-      login({ id: usuarioCreado._id, nickName: usuarioCreado.nickname });
+      login({ id: usuarioCreado.id, nickName: usuarioCreado.nickname });
       navigate("/");
     } catch (error) {
       const mensaje =

@@ -34,3 +34,44 @@ export async function getPosts(): Promise<Post[]> {
   const data = await res.json();
   return data.posts || data;
 }
+
+export async function getPostById(id: string | number): Promise<Post> {
+  const res = await fetch(`${API_URL}/posts/${id}`);
+  if (!res.ok) throw new Error("Error al obtener la publicación");
+
+  return res.json();
+}
+
+export async function getCommentsByPost(postId: string | number) {
+  const res = await fetch(`${API_URL}/comments/post/${postId}`);
+  if (!res.ok) throw new Error("Error al obtener los comentarios");
+
+  const data = await res.json();
+  return data.comments || data;
+}
+
+export async function createComment(data: {
+  descripcion: string;
+  userId: number;
+  postId: number;
+}) {
+  const res = await fetch(`${API_URL}/comments`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "No se pudo crear el comentario");
+  }
+
+  return res.json();
+}
+
+export async function getPostsByUser(userId: string | number): Promise<Post[]> {
+  const res = await fetch(`${API_URL}/users/${userId}/posts`);
+  if (!res.ok) throw new Error("Error al obtener los posts del usuario");
+
+  return res.json();
+}
