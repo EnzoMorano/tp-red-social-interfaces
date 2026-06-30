@@ -8,7 +8,7 @@ import {
 
 interface User {
   id: number;
-  nickName: string;
+  nickname: string;
 }
 
 interface UserContextType {

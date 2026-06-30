@@ -31,7 +31,7 @@ export default function Register() {
       nuevosErrores.fechaNac = "La fecha de nacimiento es obligatoria";
     }
     if (!nickName.trim()) {
-      nuevosErrores.nickName = "El nombre de usuario es obligatorio";
+      nuevosErrores.nickname = "El nombre de usuario es obligatorio";
     }
     if (!password.trim()) {
       nuevosErrores.password = "La contraseña es obligatoria";
@@ -63,7 +63,7 @@ export default function Register() {
 
       setEnviado(true);
 
-      login({ id: usuarioCreado.id, nickName: usuarioCreado.nickname });
+      login({ id: usuarioCreado.id, nickname: usuarioCreado.nickname });
       navigate("/");
     } catch (error) {
       const mensaje =

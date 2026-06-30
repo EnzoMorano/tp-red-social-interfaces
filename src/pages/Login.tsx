@@ -19,7 +19,7 @@ export default function Login() {
     const nuevosErrores: Record<string, string> = {};
 
     if (!nickName.trim()) {
-      nuevosErrores.nickName = "El nombre de usuario es obligatorio";
+      nuevosErrores.nickname = "El nombre de usuario es obligatorio";
     }
     if (!password.trim()) {
       nuevosErrores.password = "La contraseña es obligatoria";
@@ -38,7 +38,7 @@ export default function Login() {
       const usuario = usuarios.find((u: any) => u.nickname === nickName);
 
       if (!usuario) {
-        setErrores({ nickName: "El usuario no existe" });
+        setErrores({ nickname: "El usuario no existe" });
         return;
       }
 
@@ -47,7 +47,7 @@ export default function Login() {
         return;
       }
       setEnviado(true);
-      login({ id: usuario.id, nickName: usuario.nickname });
+      login({ id: usuario.id, nickname: usuario.nickname });
       navigate("/");
     } catch (error) {
       const mensaje =

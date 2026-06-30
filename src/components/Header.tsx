@@ -36,10 +36,28 @@ function Header() {
         <div className="flex items-center gap-4">
           {user ? (
             <>
-              <button className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg cursor-pointer shadow-lg shadow-blue-500/40">
+              <Link
+                to="/create-post"
+                className="
+                  flex items-center gap-2
+                  px-4 py-1.5
+                  bg-blue-600
+                  hover:bg-blue-700
+                  text-white
+                  text-sm
+                  font-semibold
+                  rounded-lg
+                  cursor-pointer
+                  shadow-lg
+                  shadow-blue-500/40
+                "
+              >
+
                 <FiEdit className="text-base" />
+
                 Crear post
-              </button>
+
+              </Link>
 
               <Link
                 to="/profile"
@@ -94,7 +112,7 @@ function Header() {
                   onClick={() => setMenuAbierto(!menuAbierto)}
                   className="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer"
                 >
-                  {user.nickName}
+                  {user.nickname}
                   <FiChevronDown className="text-xs" />
                 </button>
                 {menuAbierto && (

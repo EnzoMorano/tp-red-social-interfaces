@@ -8,6 +8,7 @@ import { Home } from "./pages/Home";
 import Post from "./pages/Post";
 import Profile from "./pages/Profile";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import CreatePost from "./pages/CreatePost";
 
 
 function App() {
@@ -17,6 +18,16 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route
+          path="/create-post"
+          element={
+            <ProtectedRoute>
+              <CreatePost />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/post/:id" element={<Post />} />
         <Route
           path="/profile"
