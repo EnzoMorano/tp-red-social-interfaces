@@ -36,9 +36,8 @@ export default function CreatePost() {
 
       await createPost({
         descripcion: descripcion.trim(),
-        userId: user.id
+        userNickname: user.nickname
       });
-
 
       navigate("/");
 

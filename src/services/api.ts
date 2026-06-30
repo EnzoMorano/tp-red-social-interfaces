@@ -79,7 +79,7 @@ export async function getPostsByUser(userId: string | number): Promise<Post[]> {
 
 export async function createPost(data: {
   descripcion: string;
-  userId: number;
+  userNickname: string;
 }) {
   const res = await fetch(`${API_URL}/posts`, {
     method: "POST",
@@ -91,7 +91,11 @@ export async function createPost(data: {
 
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || "No se pudo crear la publicación");
+
+    throw new Error(
+      error.message || "No se pudo crear la publicación"
+    );
+
   }
 
   return res.json();
