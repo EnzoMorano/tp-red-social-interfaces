@@ -23,6 +23,7 @@ export interface PostUser {
 
 export interface PostImage {
   url: string;
+  URL?: string;
 }
 
 export interface PostTag {

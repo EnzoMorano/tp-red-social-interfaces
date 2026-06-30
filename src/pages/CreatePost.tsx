@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/userContext";
-import { createPost } from "../services/api";
+import { createPost, createPostImages, createTag } from "../services/api";
 
 
 export default function CreatePost() {
@@ -10,6 +10,8 @@ export default function CreatePost() {
   const navigate = useNavigate();
 
   const [descripcion, setDescripcion] = useState("");
+  const [imagen, setImagen] = useState("");
+  const [tags, setTags] = useState("");
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
 
@@ -31,15 +33,42 @@ export default function CreatePost() {
 
     try {
 
-      setCargando(true);
-      setError("");
-
-      await createPost({
+      const postCreado = await createPost({
         descripcion: descripcion.trim(),
         userNickname: user.nickname
       });
 
-      navigate("/");
+
+      if (imagen.trim()) {
+
+        await createPostImages({
+          URL: imagen.trim(),
+          postId: postCreado.id
+        });
+
+      }
+
+
+      if (tags.trim()) {
+
+        const listaTags = tags
+          .split(",")
+          .map(tag => tag.trim())
+          .filter(Boolean);
+
+
+        for (const tag of listaTags) {
+
+          await createTag({
+            nombre: tag
+          });
+
+        }
+
+      }
+
+
+    navigate("/");
 
 
     } catch(error){
@@ -116,6 +145,60 @@ export default function CreatePost() {
                 focus:ring-2
                 focus:ring-blue-500
               "
+
+            />
+
+            <input
+
+            type="text"
+
+            placeholder="URL de imagen"
+
+            value={imagen}
+
+            onChange={(e)=>{
+              setImagen(e.target.value);
+            }}
+
+            className="
+            w-full
+            rounded-lg
+            border
+            border-gray-300
+            dark:border-gray-600
+            bg-white
+            dark:bg-gray-900
+            text-gray-900
+            dark:text-white
+            p-3
+            "
+
+            />
+
+            <input
+
+            type="text"
+
+            placeholder="Etiquetas separadas por coma: musica, arte, fotos"
+
+            value={tags}
+
+            onChange={(e)=>{
+              setTags(e.target.value);
+            }}
+
+            className="
+            w-full
+            rounded-lg
+            border
+            border-gray-300
+            dark:border-gray-600
+            bg-white
+            dark:bg-gray-900
+            text-gray-900
+            dark:text-white
+            p-3
+            "
 
             />
 

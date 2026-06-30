@@ -100,3 +100,43 @@ export async function createPost(data: {
 
   return res.json();
 }
+
+export async function createPostImages(data: {
+  URL: string;
+  postId: number;
+}) {
+  const res = await fetch(`${API_URL}/postImages`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error("No se pudo guardar la imagen");
+  }
+
+  return res.json();
+}
+
+
+export async function createTag(data: {
+  nombre: string;
+}) {
+  const res = await fetch(`${API_URL}/tags`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+
+  if (!res.ok) {
+    throw new Error("No se pudo crear el tag");
+  }
+
+
+  return res.json();
+}

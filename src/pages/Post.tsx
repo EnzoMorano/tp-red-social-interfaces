@@ -106,7 +106,7 @@ export default function Post() {
               {post.images.map((image, index) => (
                 <img
                   key={`${image.url}-${index}`}
-                  src={image.url}
+                  src={image.url || image.URL}
                   alt={`Imagen ${index + 1}`}
                   className="w-full rounded-lg object-cover max-h-96 border border-gray-200 dark:border-gray-700"
                 />
