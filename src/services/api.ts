@@ -75,3 +75,5 @@ export async function getPostsByUser(userId: string | number): Promise<Post[]> {
 
   return res.json();
 }
+
+

@@ -19,6 +19,7 @@ function Header() {
   const { user, logout } = useUser();
   const [notifAbierto, setNotifAbierto] = useState(false);
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const [cantidadNotificaciones, setCantidadNotificaciones] = useState(3);
 
   useEffect(() => {
     setNotifAbierto(false);
@@ -50,15 +51,40 @@ function Header() {
               <div className="relative">
                 <button
                   onClick={() => setNotifAbierto(!notifAbierto)}
-                  className="flex items-center cursor-pointer"
+                  className="relative flex items-center cursor-pointer"
                 >
-                  <FiBell className="text-xl text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400" />
+                  <FiBell className="text-xl text-gray-700 dark:text-gray-300" />
+
+                  {cantidadNotificaciones > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                      {cantidadNotificaciones}
+                    </span>
+                  )}
+
                 </button>
-                {notifAbierto && (
-                  <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg px-4 py-3 whitespace-nowrap z-50">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      No hay notificaciones todavía.
-                    </p>
+               {notifAbierto && (
+                  <div className="absolute right-0 top-full mt-2 w-72 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 z-50">
+
+                    <div className="space-y-3">
+
+                      <p className="font-bold text-gray-800 dark:text-white border-b pb-2">
+                        Notificaciones
+                      </p>
+
+                      <div className="text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg cursor-pointer">
+                        ❤️ A alguien le gustó tu publicación
+                      </div>
+
+                      <div className="text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg cursor-pointer">
+                        💬 Tienes un nuevo comentario
+                      </div>
+
+                      <div className="text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg cursor-pointer">
+                        👤 Nuevo usuario registrado
+                      </div>
+
+                    </div>
+
                   </div>
                 )}
               </div>

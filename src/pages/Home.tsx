@@ -42,8 +42,8 @@ if (loading) {
             No hay publicaciones todavía. ¡Sé el primero en postear!
           </div>
         ) : (
-          posts.map((post, index) => (
-            <PostCard key={index} post={post} />
+          posts.map((post) => (
+            <PostCard key={post.id} post={post} />
           ))
         )}
       </div>

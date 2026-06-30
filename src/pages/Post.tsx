@@ -31,6 +31,16 @@ export default function Post() {
 
     cargar();
   }, [id]);
+   // para redirigir desde el home a la seccion de los comentarios
+    useEffect(() => {
+      if (window.location.hash === "#comentario") {
+        setTimeout(() => {
+          document.getElementById("comentario")?.scrollIntoView({
+            behavior: "smooth",
+          });
+        }, 100);
+      }
+    }, []);
 
   async function enviarComentario(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -118,7 +128,7 @@ export default function Post() {
           ) : null}
         </article>
 
-        <section className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm p-6">
+        <section   id="comentario" className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm p-6">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Comentarios</h2>
 
           {!post.comments?.length ? (
