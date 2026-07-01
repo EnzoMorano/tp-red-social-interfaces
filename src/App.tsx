@@ -9,15 +9,29 @@ import Post from "./pages/Post";
 import Profile from "./pages/Profile";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import CreatePost from "./pages/CreatePost";
-
+import { PublicRoute } from "./components/publicRoute";
 
 function App() {
   return (
     <>
       <Header /> {/* Se mantiene fijo en todas las páginas */}
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
 
         <Route
           path="/create-post"

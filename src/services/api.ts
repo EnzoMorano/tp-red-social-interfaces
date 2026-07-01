@@ -8,6 +8,12 @@ export async function getUsers() {
   return res.json();
 }
 
+export async function getUserById(id: number) {
+  const res = await fetch(`${API_URL}/users/${id}`);
+  if (!res.ok) throw new Error("Error al obtener el usuario");
+  return res.json();
+}
+
 export async function createUser(userData: {
   nombre: string;
   apellido: string;

@@ -35,6 +35,8 @@ export interface PostComment {
   id: number;
   descripcion: string;
   fecha: string;
+  createdAt: string;
   userId: number;
   postId: number;
+  user?: { nickname: string };
 }

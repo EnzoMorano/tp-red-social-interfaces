@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { FiStar } from "react-icons/fi";
 import type { Post } from "../interfaces/types";
-import { getPosts } from "../services/api"; // Importamos la función limpia
-import  {PostCard}  from "../components/PostCard";
+import { getPosts } from "../services/api";
+import { PostCard } from "../components/PostCard";
 
 export const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  
 
   useEffect(() => {
     getPosts()
@@ -18,7 +20,20 @@ export const Home = () => {
         setLoading(false);
       });
   }, []);
-if (loading) {
+
+  const postDestacado = useMemo(() => {
+    if (posts.length === 0) return null;
+    return posts.reduce((max, p) =>
+      (p.comments?.length ?? 0) > (max.comments?.length ?? 0) ? p : max,
+    );
+  }, [posts]);
+
+  const postsRestantes = useMemo(() => {
+    if (!postDestacado) return posts;
+    return posts.filter((p) => p.id !== postDestacado.id);
+  }, [posts, postDestacado]);
+
+  if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[50vh] bg-gray-50 dark:bg-gray-950">
         <p className="text-gray-500 dark:text-gray-400 font-medium animate-pulse">
@@ -37,16 +52,32 @@ if (loading) {
           </h1>
         </header>
 
-        {posts.length === 0 ? (
-          <div className="text-center p-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 text-gray-500 dark:text-gray-400 shadow-sm">
-            No hay publicaciones todavía. ¡Sé el primero en postear!
-          </div>
-        ) : (
-          posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))
+        {postDestacado && (
+          <section className="mb-8">
+            <div className="flex items-center gap-2 mb-4 px-2">
+              <FiStar className="text-yellow-500 text-lg" />
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                Publicación destacada
+              </h2>
+            </div>
+            <PostCard post={postDestacado} featured />
+          </section>
         )}
+
+        <section>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 px-2">
+            Publicaciones recientes
+          </h2>
+
+          {postsRestantes.length === 0 && !postDestacado ? (
+            <div className="text-center p-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 text-gray-500 dark:text-gray-400 shadow-sm">
+              No hay publicaciones todavía. ¡Sé el primero en postear!
+            </div>
+          ) : (
+            postsRestantes.map((post) => <PostCard key={post.id} post={post} />)
+          )}
+        </section>
       </div>
     </main>
-  ); 
+  );
 };
