@@ -72,8 +72,21 @@ function Header() {
             <>
               <Link
                 to="/create-post"
-                className="hidden md:flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg cursor-pointer shadow-lg shadow-blue-500/40"
-              >
+                className="
+                  hidden md:flex
+                  items-center gap-2
+                  px-4 py-1.5
+                  bg-blue-600
+                  hover:bg-blue-700
+                  hover:-translate-y-1
+                  hover:shadow-xl
+                  text-white
+                  text-sm font-semibold
+                  rounded-lg
+                  cursor-pointer
+                  shadow-lg shadow-blue-500/40
+                  transition-all duration-200
+                "              >
                 <FiEdit className="text-base" />
                 Crear post
               </Link>

@@ -31,8 +31,7 @@ export const PostCard = ({ post, featured }: PostCardProps) => {
     .reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const avatarBg = bgColors[charCodeSum % bgColors.length];
   return (
-    <article className={`border border-gray-100 dark:border-gray-700/50 rounded-xl p-5 mb-4 shadow-sm hover:shadow-md dark:hover:bg-gray-800/80 transition-all duration-200 cursor-pointer ${
-      featured
+      <article className={`border border-gray-100 dark:border-gray-700/50 rounded-xl p-5 mb-4 shadow-sm hover:shadow-xl hover:-translate-y-1 dark:hover:bg-gray-800/80 transition-all duration-200 cursor-pointer ${      featured
         ? "bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 border-yellow-200 dark:border-yellow-700/50 shadow-md"
         : "bg-white dark:bg-gray-800"
     }`}>
