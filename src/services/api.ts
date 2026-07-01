@@ -1,6 +1,6 @@
 import type { Post } from "../interfaces/types";
 
-const API_URL = "http://localhost:3000";
+export const API_URL = "http://localhost:3000";
 
 export async function getUsers() {
   const res = await fetch(`${API_URL}/users`);

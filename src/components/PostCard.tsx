@@ -4,8 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import type { Post } from "../interfaces/types";
 import { useState } from "react";
 import { useUser } from "../context/userContext";
-
-const API_URL = "http://localhost:3000";
+import { API_URL } from "../services/api";
 
 interface PostCardProps {
   post: Post;
