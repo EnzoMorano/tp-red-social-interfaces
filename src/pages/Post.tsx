@@ -14,6 +14,7 @@ export default function Post() {
   const [text, setText] = useState("");
   const [error, setError] = useState("");
   const [commentError, setCommentError] = useState("");
+  const [commentExito, setCommentExito] = useState("");
 
   useEffect(() => {
     async function cargar() {
@@ -74,6 +75,8 @@ export default function Post() {
 
     setText("");
     setCommentError("");
+    setCommentExito("¡Comentario publicado!");
+    setTimeout(() => setCommentExito(""), 2500);
     try {
       const postActualizado = await getPostById(id);
       setPost(postActualizado);
@@ -266,6 +269,9 @@ export default function Post() {
 
               {commentError && (
                 <p className="text-red-500 text-sm">{commentError}</p>
+              )}
+              {commentExito && (
+                <p className="font-bold text-green-500 text-sm">{commentExito}</p>
               )}
 
               <button

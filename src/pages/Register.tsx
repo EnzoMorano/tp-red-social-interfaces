@@ -31,7 +31,7 @@ export default function Register() {
       nuevosErrores.fechaNac = "La fecha de nacimiento es obligatoria";
     }
     if (!nickName.trim()) {
-      nuevosErrores.nickname = "El nombre de usuario es obligatorio";
+      nuevosErrores.nickName = "El nombre de usuario es obligatorio";
     }
     if (!password.trim()) {
       nuevosErrores.password = "La contraseña es obligatoria";

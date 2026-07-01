@@ -11,6 +11,7 @@ export default function CreatePost() {
   const [imagenes, setImagenes] = useState([""]);
   const [tags, setTags] = useState("");
   const [error, setError] = useState("");
+  const [exito, setExito] = useState("");
   const [cargando, setCargando] = useState(false);
   const [tagsDisponibles, setTagsDisponibles] = useState<any[]>([]);
 const [tagsSeleccionados, setTagsSeleccionados] = useState<string[]>([]);
@@ -127,7 +128,8 @@ const [tagsSeleccionados, setTagsSeleccionados] = useState<string[]>([]);
         await createPostImages({ URL: url, postId: postCreado.id });
       }
 
-      navigate("/");
+      setExito("¡Publicación creada con éxito!");
+      setTimeout(() => navigate(`/post/${postCreado.id}`), 1200);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Error creando publicación"
@@ -214,6 +216,7 @@ const [tagsSeleccionados, setTagsSeleccionados] = useState<string[]>([]);
             />
 
             {error && <p className="text-red-500 text-sm">{error}</p>}
+            {exito && <p className="font-bold text-green-500 text-center text-sm">{exito}</p>}
 
         <div>
           <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
