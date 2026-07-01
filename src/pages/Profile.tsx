@@ -6,6 +6,8 @@ import {
   FiUserPlus,
   FiUserMinus,
   FiX,
+  FiSettings,
+  FiEdit2,
 } from "react-icons/fi";
 import { useUser } from "../context/userContext";
 import type { Post, User, Seguidor } from "../interfaces/types";
@@ -17,6 +19,7 @@ import {
   getFollowers,
   followUser,
   unfollowUser,
+  formatFecha,
 } from "../services/api";
 
 export default function Profile() {
@@ -194,14 +197,22 @@ export default function Profile() {
             </div>
 
             {esPropio ? (
-              <button
-                type="button"
-                onClick={logout}
-                className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer"
-              >
-                <FiLogOut />
-                Cerrar sesión
-              </button>
+              <div className="flex items-center gap-2">
+                <Link
+                  to="/edit-profile"
+                  className="flex items-center gap-2 px-3 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm font-semibold rounded-lg transition-all duration-200 cursor-pointer"
+                >
+                  <FiSettings />
+                </Link>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer"
+                >
+                  <FiLogOut />
+                  Cerrar sesión
+                </button>
+              </div>
             ) : (
               <button
                 type="button"
@@ -240,13 +251,9 @@ export default function Profile() {
                 key={post.id}
                 className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700/50 shadow-sm p-5 hover:shadow-md transition-all duration-200"
               >
-                {post.fecha && (
+                {(post.createdAt || post.fecha) && (
                   <p className="text-xs text-gray-400 dark:text-gray-500 mb-2">
-                    {new Date(post.fecha).toLocaleString("es-AR", {
-                      timeZone: "America/Argentina/Buenos_Aires",
-                      dateStyle: "short",
-                      timeStyle: "short",
-                    })}
+                    {formatFecha(post.createdAt || post.fecha)}
                   </p>
                 )}
 
@@ -272,12 +279,22 @@ export default function Profile() {
                     {post.comments?.length ?? 0} comentarios
                   </span>
 
-                  <Link
-                    to={`/post/${post.id}`}
-                    className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
-                  >
-                    Ver más
-                  </Link>
+                  <div className="flex gap-2">
+                    {esPropio && (
+                      <Link
+                        to={`/edit-post/${post.id}`}
+                        className="inline-flex items-center px-3 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm font-semibold rounded-lg transition-all duration-200"
+                      >
+                        <FiEdit2 />
+                      </Link>
+                    )}
+                    <Link
+                      to={`/post/${post.id}`}
+                      className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+                    >
+                      Ver más
+                    </Link>
+                  </div>
                 </div>
               </article>
             ))

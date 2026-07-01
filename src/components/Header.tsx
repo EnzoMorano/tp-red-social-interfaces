@@ -5,13 +5,11 @@ import { useUser } from "../context/userContext";
 import {
   FiMoon,
   FiSun,
-  FiPlusCircle,
   FiLogOut,
   FiBell,
   FiChevronDown,
   FiTrash2,
   FiEdit,
-  FiSearch,
 } from "react-icons/fi";
 import logoClaro from "../assets/logo claro.png";
 import logoOscuro from "../assets/logo oscuro.png";
@@ -34,7 +32,7 @@ function Header() {
   }, [location.pathname]);
 
   return (
-    <header className="bg-white dark:bg-gray-900 shadow-md">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 shadow-md">
       <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto gap-2">
         <div className="flex items-center gap-3">
           <Link to="/">
@@ -86,7 +84,8 @@ function Header() {
                   cursor-pointer
                   shadow-lg shadow-blue-500/40
                   transition-all duration-200
-                "              >
+                "
+              >
                 <FiEdit className="text-base" />
                 Crear post
               </Link>
@@ -251,7 +250,7 @@ function Header() {
                 onClick={() => setMenuMobileAbierto(false)}
                 className="block px-4 py-2 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
               >
-                Perfil
+                Perfil ({user?.nickname})
               </Link>
               <button
                 onClick={() => {

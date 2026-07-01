@@ -7,6 +7,8 @@ import Register from "./pages/Register";
 import { Home } from "./pages/Home";
 import Post from "./pages/Post";
 import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
+import EditPost from "./pages/EditPost";
 import Search from "./pages/Search";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import CreatePost from "./pages/CreatePost";
@@ -17,7 +19,8 @@ function App() {
   return (
     <>
       <Header /> {/* Se mantiene fijo en todas las páginas */}
-      <Routes>
+      <div className="pt-16">
+        <Routes>
         <Route
           path="/login"
           element={
@@ -62,13 +65,30 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/edit-profile"
+          element={
+            <ProtectedRoute>
+              <EditProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-post/:id"
+          element={
+            <ProtectedRoute>
+              <EditPost />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/" element={<Home />} />
 
         <Route 
           path="/privacidad"
           element={<Privacy />}
         />
-      </Routes>
+              </Routes>
+      </div>
       <Footer /> {/* Se mantiene fijo en todas las páginas */}
     </>
   );

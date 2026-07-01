@@ -36,6 +36,7 @@ export interface Post {
   id: number;
   descripcion: string;
   fecha?: string;
+  createdAt?: string;
   user?: PostUser;
   images?: PostImage[];
   tags?: PostTag[];
@@ -49,6 +50,7 @@ export interface PostUser {
 }
 
 export interface PostImage {
+  id?: number;
   url: string;
   URL?: string;
 }

@@ -32,6 +32,27 @@ export async function createUser(userData: {
   return res.json();
 }
 
+export async function updateUser(
+  id: number,
+  data: {
+    nombre?: string;
+    apellido?: string;
+    nickname?: string;
+    fecha_nacimiento?: string;
+  },
+) {
+  const res = await fetch(`${API_URL}/users/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    throw new Error(error.message || error.error || "No se pudo actualizar el usuario");
+  }
+  return res.json();
+}
+
 // ------------------
 export async function getPosts(): Promise<Post[]> {
   const res = await fetch(`${API_URL}/posts`);
@@ -45,6 +66,19 @@ export async function getPostById(id: string | number): Promise<Post> {
   const res = await fetch(`${API_URL}/posts/${id}`);
   if (!res.ok) throw new Error("Error al obtener la publicación");
 
+  return res.json();
+}
+
+export async function updatePost(id: number, data: { descripcion: string }) {
+  const res = await fetch(`${API_URL}/posts/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || err.error || "No se pudo actualizar la publicación");
+  }
   return res.json();
 }
 
@@ -133,6 +167,14 @@ export async function createPostImages(data: {
   return res.json();
 }
 
+export async function deletePostImage(id: number) {
+  const res = await fetch(`${API_URL}/postImages/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("No se pudo eliminar la imagen");
+  return res.json();
+}
+
 
 // ------------------
 // Followers
@@ -193,6 +235,14 @@ export async function linkTagToPost(postId: number, tagId: number) {
   return res.json();
 }
 
+export async function unlinkTagFromPost(postId: number, tagId: number) {
+  const res = await fetch(`${API_URL}/posts/${postId}/tags/${tagId}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("No se pudo desvincular el tag");
+  return res.json();
+}
+
 export async function createTag(data: {
   nombre: string;
 }) {
@@ -218,4 +268,15 @@ export async function getTags() {
   if (!res.ok) throw new Error("Error obteniendo tags");
   const data = await res.json();
   return data.tags ?? data;
+}
+
+export function formatFecha(fecha: string | undefined): string {
+  if (!fecha) return "";
+  const esSoloFecha = /^\d{4}-\d{2}-\d{2}$/.test(fecha);
+  const date = esSoloFecha ? new Date(fecha + "T12:00:00") : new Date(fecha);
+  return date.toLocaleString("es-AR", {
+    timeZone: "America/Argentina/Buenos_Aires",
+    dateStyle: "short",
+    timeStyle: "short",
+  });
 }

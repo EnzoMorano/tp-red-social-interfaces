@@ -1,10 +1,10 @@
-import { FiMessageSquare } from "react-icons/fi";
+import { FiMessageSquare, FiEdit } from "react-icons/fi";
 import { IoIosHeartEmpty, IoMdHeart } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import type { Post } from "../interfaces/types";
 import { useState } from "react";
 import { useUser } from "../context/userContext";
-import { API_URL } from "../services/api";
+import { API_URL, formatFecha } from "../services/api";
 
 interface PostCardProps {
   post: Post;
@@ -58,14 +58,19 @@ export const PostCard = ({ post, featured }: PostCardProps) => {
               >
                 @{nicknameValido.toLowerCase()}
               </Link>
-              {post.fecha && (
+              {(post.createdAt || post.fecha) && (
                 <span className="text-gray-400 dark:text-gray-500 text-xs ml-auto">
-                  {new Date(post.fecha).toLocaleString("es-AR", {
-                    timeZone: "America/Argentina/Buenos_Aires",
-                    dateStyle: "short",
-                    timeStyle: "short",
-                  })}
+                  {formatFecha(post.createdAt || post.fecha)}
                 </span>
+              )}
+              {user?.nickname === nicknameValido && (
+                <Link
+                  to={`/edit-post/${post.id}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors ml-1"
+                >
+                  <FiEdit className="text-sm" />
+                </Link>
               )}
             </div>
 

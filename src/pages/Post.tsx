@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { FiEdit } from "react-icons/fi";
 import { useUser } from "../context/userContext";
 import type { Post, PostComment } from "../interfaces/types";
-import { createComment, getPostById, API_URL } from "../services/api";
+import { createComment, getPostById, API_URL, formatFecha } from "../services/api";
 
 export default function Post() {
   const { id } = useParams();
@@ -126,16 +127,22 @@ export default function Post() {
               );
             })()}
             <div>
-              <h1 className="text-xl font-extrabold text-gray-900 dark:text-white">
-                {post.user?.nickname || "Anónimo"}
-              </h1>
-              {post.fecha && (
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-extrabold text-gray-900 dark:text-white">
+                  {post.user?.nickname || "Anónimo"}
+                </h1>
+                {user?.nickname === post.user?.nickname && (
+                  <Link
+                    to={`/edit-post/${post.id}`}
+                    className="text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+                  >
+                    <FiEdit className="text-sm" />
+                  </Link>
+                )}
+              </div>
+              {(post.createdAt || post.fecha) && (
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {new Date(post.fecha).toLocaleString("es-AR", {
-                    timeZone: "America/Argentina/Buenos_Aires",
-                    dateStyle: "short",
-                    timeStyle: "short",
-                  })}
+                  {formatFecha(post.createdAt || post.fecha)}
                 </p>
               )}
             </div>
@@ -201,13 +208,9 @@ export default function Post() {
                   .reduce((acc, char) => acc + char.charCodeAt(0), 0);
                 const avatarBg = bgColors[charCodeSum % bgColors.length];
 
-                const fechaFormateada = new Date(
-                  comment.createdAt || comment.fecha
-                ).toLocaleString("es-AR", {
-                  timeZone: "America/Argentina/Buenos_Aires",
-                  dateStyle: "short",
-                  timeStyle: "short",
-                });
+                const fechaFormateada = formatFecha(
+                  comment.createdAt || comment.fecha,
+                );
 
                 return (
                   <div
