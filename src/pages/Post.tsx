@@ -4,6 +4,8 @@ import { useUser } from "../context/userContext";
 import type { Post } from "../interfaces/types";
 import { createComment, getPostById } from "../services/api";
 
+const API_URL = "http://localhost:3000";
+
 export default function Post() {
   const { id } = useParams();
   const { user } = useUser();
@@ -132,14 +134,18 @@ export default function Post() {
 
           {post.images?.length ? (
             <div className="grid gap-3 mb-4">
-              {post.images.map((image, index) => (
-                <img
-                  key={`${image.url}-${index}`}
-                  src={image.url || image.URL}
-                  alt={`Imagen ${index + 1}`}
-                  className="w-full rounded-lg object-cover max-h-96 border border-gray-200 dark:border-gray-700"
-                />
-              ))}
+              {post.images.map((image, index) => {
+                const imgUrl = image.url || image.URL;
+                const src = imgUrl?.startsWith("http") ? imgUrl : `${API_URL}${imgUrl}`;
+                return (
+                  <img
+                    key={`${image.url}-${index}`}
+                    src={src}
+                    alt={`Imagen ${index + 1}`}
+                    className="w-full rounded-lg object-cover max-h-96 border border-gray-200 dark:border-gray-700"
+                  />
+                );
+              })}
             </div>
           ) : null}
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/userContext";
-import { createPost, createPostImages,createTag, getTags } from "../services/api";
+import { createPost, createPostImages, createTag, getTags, linkTagToPost } from "../services/api";
 
 
 export default function CreatePost() {
@@ -53,44 +53,35 @@ export default function CreatePost() {
     }
 
 
+    setCargando(true);
+
     try {
 
-      let tagIds:number[] = [];
+      const postCreado = await createPost({
+        descripcion: descripcion.trim(),
+        userNickname: user.nickname
+      });
 
-
-      if(tags.trim()){
-
+      if (tags.trim()) {
         const listaTags = tags
           .split(",")
-          .map(tag => tag.trim())
+          .map((tag) => tag.trim())
           .filter(Boolean);
 
         const tagsExistentes = await getTags();
 
-        for(const nombre of listaTags){
-
+        for (const nombre of listaTags) {
           let tag = tagsExistentes.find(
-            (t:any)=>t.nombre === nombre
+            (t: any) => t.nombre.toLowerCase() === nombre.toLowerCase(),
           );
 
-          if(!tag){
-            tag = await createTag({
-              nombre
-            });
+          if (!tag) {
+            tag = await createTag({ nombre });
           }
 
-          tagIds.push(tag.id);
+          await linkTagToPost(postCreado.id, tag.id);
         }
       }
-
-
-
-      const postCreado = await createPost({
-        descripcion: descripcion.trim(),
-        userNickname: user.nickname,
-        tagIds
-
-      });
 
 
       const imagenesValidas = imagenes.filter(img => img.trim());

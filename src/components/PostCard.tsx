@@ -5,6 +5,8 @@ import type { Post } from "../interfaces/types";
 import { useState } from "react";
 import { useUser } from "../context/userContext";
 
+const API_URL = "http://localhost:3000";
+
 interface PostCardProps {
   post: Post;
   featured?: boolean;
@@ -85,13 +87,17 @@ export const PostCard = ({ post, featured }: PostCardProps) => {
                 ))}
               </div>
             ) : null}
-            {post.images?.[0]?.url && (
-              <img
-                src={post.images[0].url}
-                alt="Imagen del post"
-                className="w-full rounded-xl mt-4 mb-2 object-cover max-h-96"
-              />
-            )}
+            {post.images?.[0] && (() => {
+              const imgUrl = post.images[0].url || post.images[0].URL;
+              const src = imgUrl?.startsWith("http") ? imgUrl : `${API_URL}${imgUrl}`;
+              return (
+                <img
+                  src={src}
+                  alt="Imagen del post"
+                  className="w-full rounded-xl mt-4 mb-2 object-cover max-h-96"
+                />
+              );
+            })()}
           </Link>
 
           <div className="flex justify-between max-w-sm text-gray-500 dark:text-gray-400 text-sm font-medium mt-4">

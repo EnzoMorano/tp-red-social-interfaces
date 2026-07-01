@@ -120,7 +120,14 @@ export async function createPostImages(data: {
   });
 
   if (!res.ok) {
-    throw new Error("No se pudo guardar la imagen");
+    let mensaje = "No se pudo guardar la imagen";
+    try {
+      const err = await res.json();
+      mensaje = err.message || err.error || JSON.stringify(err);
+    } catch {
+      mensaje = `Error ${res.status}: ${res.statusText}`;
+    }
+    throw new Error(mensaje);
   }
 
   return res.json();
@@ -164,6 +171,25 @@ export async function getFollowers(userId: number) {
 export async function getFollowing(userId: number) {
   const res = await fetch(`${API_URL}/users/${userId}/following`);
   if (!res.ok) throw new Error("Error al obtener seguidos");
+  return res.json();
+}
+
+export async function linkTagToPost(postId: number, tagId: number) {
+  const res = await fetch(`${API_URL}/posts/${postId}/tags`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ tagId }),
+  });
+  if (!res.ok) {
+    let mensaje = "No se pudo vincular el tag";
+    try {
+      const err = await res.json();
+      mensaje = err.message || err.error || JSON.stringify(err);
+    } catch {
+      mensaje = `Error ${res.status}: ${res.statusText}`;
+    }
+    throw new Error(mensaje);
+  }
   return res.json();
 }
 
