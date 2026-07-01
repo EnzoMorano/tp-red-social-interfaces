@@ -90,12 +90,12 @@ export default function Login() {
               value={nickName}
               onChange={(e) => {
                 setNickName(e.target.value);
-                setErrores((prev) => ({ ...prev, nickName: "" }));
+                setErrores((prev) => ({ ...prev, nickname: "" }));
               }}
-              className={`w-full px-4 py-2.5 rounded-lg border bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 ${errores.nickName ? "border-red-500" : "border-gray-300 dark:border-gray-600"}`}
+              className={`w-full px-4 py-2.5 rounded-lg border bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 ${errores.nickname ? "border-red-500" : "border-gray-300 dark:border-gray-600"}`}
             />
-            {errores.nickName && (
-              <p className="text-red-500 text-sm mt-1">{errores.nickName}</p>
+            {errores.nickname && (
+              <p className="text-red-500 text-sm mt-1">{errores.nickname}</p>
             )}
           </div>
 

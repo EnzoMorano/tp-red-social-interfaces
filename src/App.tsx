@@ -7,17 +7,32 @@ import Register from "./pages/Register";
 import { Home } from "./pages/Home";
 import Post from "./pages/Post";
 import Profile from "./pages/Profile";
+import Search from "./pages/Search";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import CreatePost from "./pages/CreatePost";
-
+import { PublicRoute } from "./components/publicRoute";
 
 function App() {
   return (
     <>
       <Header /> {/* Se mantiene fijo en todas las páginas */}
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
 
         <Route
           path="/create-post"
@@ -29,8 +44,17 @@ function App() {
         />
 
         <Route path="/post/:id" element={<Post />} />
+        <Route path="/search" element={<Search />} />
         <Route
           path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/:nickname"
           element={
             <ProtectedRoute>
               <Profile />

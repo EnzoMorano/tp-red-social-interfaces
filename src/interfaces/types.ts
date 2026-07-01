@@ -1,8 +1,35 @@
 export interface User {
+  id: number;
   nickname: string;
   nombre: string;
   apellido: string;
   fecha_nacimiento: string;
+  seguidores?: number;
+  siguiendo?: number;
+  seguidoresCount?: number;
+  siguiendoCount?: number;
+}
+
+export interface Seguidor {
+  id?: number;
+  seguidorId?: number;
+  seguidoId?: number;
+  createdAt?: string;
+  nickname?: string;
+  nombre?: string;
+  apellido?: string;
+  seguidor?: {
+    id: number;
+    nickname: string;
+    nombre: string;
+    apellido: string;
+  };
+  seguido?: {
+    id: number;
+    nickname: string;
+    nombre: string;
+    apellido: string;
+  };
 }
 
 export interface Post {
@@ -35,6 +62,8 @@ export interface PostComment {
   id: number;
   descripcion: string;
   fecha: string;
+  createdAt: string;
   userId: number;
   postId: number;
+  user?: { nickname: string };
 }
