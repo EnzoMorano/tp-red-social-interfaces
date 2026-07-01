@@ -6,6 +6,7 @@ import { getUsers } from "../services/api";
 import { useUser } from "../context/userContext";
 import { useNavigate, Link } from "react-router-dom";
 
+
 export default function Login() {
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
@@ -14,6 +15,7 @@ export default function Login() {
   const { tema } = useTheme();
   const { login } = useUser();
   const navigate = useNavigate();
+  const [mostrarPassword, setMostrarPassword] = useState(false);
 
   function validarFormulario(): boolean {
     const nuevosErrores: Record<string, string> = {};
@@ -141,10 +143,16 @@ export default function Login() {
           <div className="text-center">
             <button
               type="button"
+              onClick={() => setMostrarPassword(true)}
               className="text-sm font-bold text-blue-600 hover:text-blue-800 hover:underline transition-all duration-200 cursor-pointer bg-transparent border-none"
             >
               ¿Olvidaste tu contraseña?
             </button>
+            {mostrarPassword && (
+              <p className="text-sm text-green-500 text-center mt-3">
+                La contraseña es 123456
+              </p>
+            )}
           </div>
         </form>
         <div className="text-center mt-5">
