@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/userContext";
-import { createPost, createPostImages, createTag } from "../services/api";
+import { createPost, createPostImages, createTag, getTags } from "../services/api";
 
 export default function CreatePost() {
   const { user } = useUser();
@@ -12,6 +12,18 @@ export default function CreatePost() {
   const [tags, setTags] = useState("");
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
+  const [tagsDisponibles, setTagsDisponibles] = useState<any[]>([]);
+const [tagsSeleccionados, setTagsSeleccionados] = useState<string[]>([]);
+
+  useEffect(() => {
+    getTags()
+      .then((data) => {
+        setTagsDisponibles(data);
+      })
+      .catch((error) => {
+        console.error("Error cargando tags:", error);
+      });
+  }, []); 
 
   function cambiarImagen(index: number, valor: string) {
     const nuevas = [...imagenes];
@@ -26,6 +38,21 @@ export default function CreatePost() {
     const nuevas = imagenes.filter((_, i) => i !== index);
     if (nuevas.length === 0) nuevas.push("");
     setImagenes(nuevas);
+  }
+
+  function seleccionarTag(nombre:string){
+    setTagsSeleccionados((prev)=>{
+      if(prev.includes(nombre)){
+        return prev.filter(
+          tag => tag !== nombre
+        );
+
+      }
+      return [
+        ...prev,
+        nombre
+      ];
+    });
   }
 
   async function enviarPost(e: React.FormEvent<HTMLFormElement>) {
@@ -52,21 +79,44 @@ export default function CreatePost() {
           .map((t) => t.trim())
           .filter(Boolean);
 
-        for (const nombre of listaTags) {
+      for (const nombre of listaTags) {
+        const tagExistente = tagsDisponibles.find(
+          (tag) =>
+            tag.nombre.toLowerCase() === nombre.toLowerCase()
+        );
+        if (tagExistente?.id) {
+          // ya existe, usamos ese
+          tagIds.push(tagExistente.id);
+
+        } else {
+          // no existe, lo creamos
           try {
             const tag = await createTag({ nombre });
             const id = tag?.id ?? tag?.tagId;
-            if (id) tagIds.push(id);
-          } catch {
-            // si falla un tag, continuar con los demás
-          }
+            if(id){
+              tagIds.push(id);
+            }
+          } catch {}
         }
       }
+      }
+
+      const idsTagsSeleccionados = tagsSeleccionados
+        .map(nombre =>
+          tagsDisponibles.find(
+            tag => tag.nombre === nombre
+          )?.id
+        )
+        .filter(Boolean) as number[];
+
 
       const postCreado = await createPost({
         descripcion: descripcion.trim(),
         userNickname: user.nickname,
-        tagIds,
+        tagIds: [
+          ...tagIds,
+          ...idsTagsSeleccionados
+        ],
       });
 
       const imagenesValidas = imagenes
@@ -86,6 +136,31 @@ export default function CreatePost() {
       setCargando(false);
     }
   }
+
+  <div>
+
+    <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+      Elegir etiquetas existentes
+    </p>
+      <div className="flex flex-wrap gap-2">
+        {
+        tagsDisponibles.map((tag, index)=>(
+
+          <button
+            key={`${tag.nombre}-${index}`}
+            type="button"
+            onClick={() => seleccionarTag(tag.nombre)}
+            className={`px-3 py-1 rounded-full text-sm cursor-pointer transition ${
+              tagsSeleccionados.includes(tag.nombre)
+              ? "bg-blue-600 text-white"
+              : "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200"
+            }`}>
+            #{tag.nombre}
+          </button>
+          ))
+        }
+      </div>
+    </div>
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8 px-4">
@@ -139,6 +214,30 @@ export default function CreatePost() {
             />
 
             {error && <p className="text-red-500 text-sm">{error}</p>}
+
+        <div>
+          <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Elegir etiquetas existentes
+          </p>
+          <div className="flex flex-wrap gap-2">
+              {
+              tagsDisponibles.map((tag)=>(
+          <button
+              key={tag.id}
+              type="button"
+              onClick={() => seleccionarTag(tag.nombre)}
+              className={`px-3 py-1 rounded-full text-sm cursor-pointer transition ${
+              tagsSeleccionados.includes(tag.nombre)
+              ? "bg-blue-600 text-white"
+              : "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200"
+              }`}
+              >
+              #{tag.nombre}
+          </button>
+          ))
+          }
+          </div>
+      </div>       
 
             <button
               type="submit"
