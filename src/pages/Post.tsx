@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useUser } from "../context/userContext";
-import type { Post } from "../interfaces/types";
+import type { Post, PostComment } from "../interfaces/types";
 import { createComment, getPostById, API_URL } from "../services/api";
 
 export default function Post() {
   const { id } = useParams();
   const { user } = useUser();
   const [post, setPost] = useState<Post | null>(null);
+  const [comentarios, setComentarios] = useState<PostComment[]>([]);
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState("");
   const [error, setError] = useState("");
@@ -21,7 +22,9 @@ export default function Post() {
       setError("");
 
       try {
-        setPost(await getPostById(id));
+        const postData = await getPostById(id);
+        setPost(postData);
+        setComentarios(postData.comments ?? []);
       } catch {
         setError("Error al cargar la publicación");
       } finally {
@@ -31,7 +34,7 @@ export default function Post() {
 
     cargar();
   }, [id]);
-  // para redirigir desde el home a la seccion de los comentarios
+
   useEffect(() => {
     if (window.location.hash === "#comentario") {
       setTimeout(() => {
@@ -50,7 +53,12 @@ export default function Post() {
       return;
     }
 
-    if (!user || !id) return;
+    if (!user?.id) {
+      setCommentError("Tu sesión expiró, volvé a iniciar sesión");
+      return;
+    }
+
+    if (!id) return;
 
     try {
       await createComment({
@@ -58,12 +66,19 @@ export default function Post() {
         userId: user.id,
         postId: Number(id),
       });
-
-      setText("");
-      setCommentError("");
-      setPost(await getPostById(id));
     } catch {
       setCommentError("No se pudo crear el comentario");
+      return;
+    }
+
+    setText("");
+    setCommentError("");
+    try {
+      const postActualizado = await getPostById(id);
+      setPost(postActualizado);
+      setComentarios(postActualizado.comments ?? []);
+    } catch {
+      // si el refresh falla el comentario igual se creó
     }
   }
 
@@ -169,13 +184,13 @@ export default function Post() {
             Comentarios
           </h2>
 
-          {!post.comments?.length ? (
+          {!comentarios.length ? (
             <p className="text-gray-500 dark:text-gray-400">
               Todavía no hay comentarios.
             </p>
           ) : (
             <div className="space-y-4">
-              {post.comments.map((comment) => {
+              {comentarios.map((comment) => {
                 const nickname = comment.user?.nickname || "Anónimo";
                 const bgColors = [
                   "bg-blue-500", "bg-purple-500", "bg-pink-500",
