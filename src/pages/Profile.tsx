@@ -188,9 +188,12 @@ export default function Profile() {
                 <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500 mt-2">
                   <FiCalendar className="text-xs" />
                   <span>
-                    {new Date(userData.fecha_nacimiento).toLocaleDateString(
-                      "es-AR",
-                    )}
+                    {(() => {
+                      const f = userData.fecha_nacimiento;
+                      const esSoloFecha = /^\d{4}-\d{2}-\d{2}$/.test(f);
+                      const date = esSoloFecha ? new Date(f + "T12:00:00") : new Date(f);
+                      return date.toLocaleDateString("es-AR");
+                    })()}
                   </span>
                 </div>
               )}
