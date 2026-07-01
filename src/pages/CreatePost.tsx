@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/userContext";
 import { createPost, createPostImages, createTag, getTags } from "../services/api";
+import { FiTrash2 } from "react-icons/fi";
 
 export default function CreatePost() {
   const { user } = useUser();
@@ -181,28 +182,85 @@ const [tagsSeleccionados, setTagsSeleccionados] = useState<string[]>([]);
               }}
               rows={6}
               placeholder="¿Qué estás pensando? (mínimo 10 caracteres)"
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-4 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-4 outline-none focus:ring-2 focus:ring-blue-500 animate-fade-scale"
             />
 
             <div className="space-y-3">
               {imagenes.map((imagen, index) => (
-                <div key={index} className="flex gap-2">
+                <div key={index} className="flex gap-2 items-center">
+
+                  {imagen.trim() && imagen.startsWith("http") && (
+                    <div className="
+                      w-12
+                      h-12
+                      rounded-lg
+                      overflow-hidden
+                      border
+                      border-gray-300
+                      dark:border-gray-600
+                      shrink-0
+                      animate-fade-scale
+                    ">
+                      <img
+                        src={imagen}
+                        alt="preview"
+                        className="
+                          w-full
+                          h-full
+                          object-cover
+                        "
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                      />
+                    </div>
+                  )}
+
                   <input
                     type="text"
                     placeholder={`URL de imagen ${index + 1}`}
                     value={imagen}
                     onChange={(e) => cambiarImagen(index, e.target.value)}
-                    className="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-3"
+                    className="
+                      flex-1
+                      rounded-lg
+                      border
+                      border-gray-300
+                      dark:border-gray-600
+                      bg-white
+                      dark:bg-gray-900
+                      text-gray-900
+                      dark:text-white
+                      p-3
+                      animate-fade-scale
+                    "
                   />
+
                   {imagenes.length > 1 && (
                     <button
                       type="button"
                       onClick={() => eliminarImagen(index)}
-                      className="px-3 bg-red-500 text-white rounded-lg"
+                      className="
+                        h-12
+                        px-3 
+                        bg-red-500 
+                        hover:bg-red-600 
+                        text-white 
+                        rounded-lg 
+                        flex 
+                        items-center 
+                        justify-center 
+                        transition-all 
+                        duration-200
+                        animate-fade-scale
+                        cursor-pointer
+                      "
+                      title="Eliminar imagen"
                     >
-                      X
+                      <FiTrash2 className="text-lg" />
                     </button>
                   )}
+
                 </div>
               ))}
             </div>
@@ -212,7 +270,7 @@ const [tagsSeleccionados, setTagsSeleccionados] = useState<string[]>([]);
               placeholder="Etiquetas separadas por coma: musica, arte, fotos"
               value={tags}
               onChange={(e) => setTags(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-3"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-3 animate-fade-scale"
             />
 
             {error && <p className="text-red-500 text-sm">{error}</p>}
