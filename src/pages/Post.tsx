@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useUser } from "../context/userContext";
 import type { Post } from "../interfaces/types";
-import { createComment, getPostById } from "../services/api";
-
-const API_URL = "http://localhost:3000";
+import { createComment, getPostById, API_URL } from "../services/api";
 
 export default function Post() {
   const { id } = useParams();
