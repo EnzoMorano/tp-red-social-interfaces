@@ -44,16 +44,234 @@ export const Home = () => {
   }
 
   return (
-    <main className="bg-gray-50 dark:bg-gray-950 min-h-screen py-8 px-4 transition-colors duration-200">
-      <div className="max-w-2xl mx-auto">
-        <header className="mb-6 px-2 flex justify-between items-center">
-          <h1 className="text-xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-            Inicio
-          </h1>
-        </header>
+      <main className="bg-gray-50 dark:bg-gray-950 min-h-screen py-8 px-4">
+    <div className="
+      max-w-6xl 
+      mx-auto 
+      grid 
+      grid-cols-1 
+      lg:grid-cols-[260px_1fr] 
+      gap-6
+    ">
 
+  {/* COLUMNA IZQUIERDA */}
+      <aside className="
+      hidden lg:block
+      bg-white dark:bg-gray-800
+      rounded-xl
+      shadow-sm
+      border border-gray-100 dark:border-gray-700
+      p-6
+      self-start
+      space-y-8
+      sticky top-20
+
+      ">
+
+    <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
+      UNaHur Anti-Social Net
+    </h2>
+
+
+    <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+      Una comunidad para compartir ideas,
+      publicaciones y conectar con otros usuarios.
+    </p>
+
+
+    <div className="space-y-2 text-sm">
+
+      <div className="flex justify-between">
+        <span className="text-gray-500">
+          Usuarios
+        </span>
+
+        <span className="font-bold">
+          120
+        </span>
+      </div>
+
+
+      <div className="flex justify-between">
+        <span className="text-gray-500">
+          Posts
+        </span>
+
+        <span className="font-bold">
+          {posts.length}
+        </span>
+      </div>
+
+
+      <div className="flex justify-between">
+        <span className="text-gray-500">
+          Estado
+        </span>
+
+        <span className="text-green-500 font-bold">
+          Online
+        </span>
+      </div>
+
+    </div>
+
+
+      {/* Sobre / tendencias */}
+      <div>
+        <h2 className="
+          font-bold
+          text-lg
+          text-gray-900
+          dark:text-white
+          mb-3
+        ">
+          🔥 Tendencias
+        </h2>
+
+        <div className="flex flex-wrap gap-2">
+
+          <span className="
+            bg-blue-100 dark:bg-blue-900
+            text-blue-700 dark:text-blue-200
+            px-3 py-1
+            rounded-full
+            text-sm
+          ">
+            #programacion
+          </span>
+
+          <span className="
+            bg-blue-100 dark:bg-blue-900
+            text-blue-700 dark:text-blue-200
+            px-3 py-1
+            rounded-full
+            text-sm
+          ">
+            #universidad
+          </span>
+
+
+          <span className="
+            bg-blue-100 dark:bg-blue-900
+            text-blue-700 dark:text-blue-200
+            px-3 py-1
+            rounded-full
+            text-sm
+          ">
+            #musica
+          </span>
+
+
+          <span className="
+            bg-blue-100 dark:bg-blue-900
+            text-blue-700 dark:text-blue-200
+            px-3 py-1
+            rounded-full
+            text-sm
+          ">
+            #viajes
+          </span>
+
+        </div>
+      </div>
+
+
+
+      {/* Estado */}
+      <div className="
+        border-t
+        border-gray-200
+        dark:border-gray-700
+        pt-5
+      ">
+
+        <h2 className="
+          font-bold
+          text-lg
+          text-gray-900
+          dark:text-white
+          mb-3
+        ">
+           Estado
+        </h2>
+
+
+        <p className="
+          text-sm
+          text-gray-600
+          dark:text-gray-300
+        ">
+          Todos los servicios funcionan correctamente.
+        </p>
+
+
+        <p className="
+          text-xs
+          text-gray-400
+          mt-2
+        ">
+          Versión 1.0
+        </p>
+
+      </div>
+
+      {/* Privacidad */}
+      <div className="
+        border-t
+        border-gray-200
+        dark:border-gray-700
+        pt-5
+      ">
+
+        <h2 className="
+          font-bold
+          text-lg
+          text-gray-900
+          dark:text-white
+          mb-3
+        ">
+           Privacidad
+        </h2>
+
+        <p className="
+          text-sm
+          text-gray-600
+          dark:text-gray-300
+          leading-relaxed
+        ">
+          Tu información está protegida.
+          Compartí contenido respetando
+          las normas de la comunidad.
+        </p>
+
+        <button
+          className="
+            mt-3
+            text-sm
+            text-blue-600
+            hover:text-blue-800
+            font-semibold
+          "
+        >
+          Ver políticas →
+        </button>
+      </div>
+    </aside>
+
+
+    <section>
+      <header className="mb-4 px-2">
+        <h1 className="
+          text-xl 
+          font-extrabold 
+          text-gray-900 
+          dark:text-white
+        ">
+          Inicio
+        </h1>
+      </header>
         {postDestacado && (
-          <section className="mb-8">
+          <section className="mb-4">
             <div className="flex items-center gap-2 mb-4 px-2">
               <FiStar className="text-yellow-500 text-lg" />
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">
@@ -65,8 +283,8 @@ export const Home = () => {
         )}
 
         <section>
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 px-2">
-            Publicaciones recientes
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3 px-2">
+              Publicaciones recientes
           </h2>
 
           {postsRestantes.length === 0 && !postDestacado ? (
@@ -77,6 +295,8 @@ export const Home = () => {
             postsRestantes.map((post) => <PostCard key={post.id} post={post} />)
           )}
         </section>
+            </section>
+
       </div>
     </main>
   );
