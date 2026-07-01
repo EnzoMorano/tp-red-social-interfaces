@@ -1,73 +1,66 @@
-# React + TypeScript + Vite
+# UNaHur Anti-Social Net
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend de la red social "UNaHur Anti-Social Net", una aplicación web desarrollada con React + TypeScript que consume una API REST para la gestión de usuarios, publicaciones, comentarios, tags, imágenes y sistema de seguidores.
 
-Currently, two official plugins are available:
+## Tecnologías
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React 19** con **TypeScript**
+- **Vite** como bundler
+- **React Router DOM** para navegación
+- **Tailwind CSS v4** para estilos
+- **React Icons** (Feather, Ionicons) para iconografía
+- **Context API** para estado global (usuario, tema)
 
-## React Compiler
+## Integrantes
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Nombre                | DNI        |
+| --------------------- | ---------- |
+| Morano Enzo Vicente   | 45.316.915 |
+| Martina Surget Albano | 46.440.329 |
+| Santiago Ianello      | 46.021.403 |
+| Castignani Sebastian  | 47.065.138 |
 
-## Expanding the ESLint configuration
+## API
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+El backend se encuentra en el siguiente repositorio:  
+[https://github.com/EnzoMorano/API-red-social](https://github.com/EnzoMorano/API-red-social)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+La API corre por defecto en `http://localhost:3000`.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Requisitos
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Node.js 18+
+- npm
+
+## Instalación y ejecución
+
+```bash
+# Clonar el repositorio
+git clone <repo-url>
+cd red-social
+
+# Instalar dependencias
+npm install
+
+# Iniciar en modo desarrollo
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+El frontend se levanta por defecto en `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Asegurate de tener la API corriendo en `http://localhost:3000` antes de usar la aplicación.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Estructura del proyecto
+
+```
+src/
+├── assets/            # Imágenes (logos)
+├── components/        # Componentes reutilizables (Header, Footer, PostCard, etc.)
+├── context/           # Contextos (UserContext, ModeContext)
+├── interfaces/        # Tipos TypeScript (User, Post, PostTag, etc.)
+├── pages/             # Páginas (Home, Login, Register, Profile, Post, etc.)
+├── services/          # Llamadas a la API
+├── App.tsx            # Configuración de rutas
+├── main.tsx           # Punto de entrada
+└── index.css          # Estilos globales y dark mode
 ```
