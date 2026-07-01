@@ -13,11 +13,18 @@ export const Home = () => {
   const [tagSeleccionado, setTagSeleccionado] = useState<string | null>(null);
   const [tagsDisponibles, setTagsDisponibles] = useState<PostTag[]>([]);
   const navigate = useNavigate();
+  const [postsVisibles, setPostsVisibles] = useState<Post[]>([]);
+  const [cargandoMas, setCargandoMas] = useState(false);
+  const [indiceCarga, setIndiceCarga] = useState(10);
+
+  const POSTS_POR_CARGA = 10;
 
   useEffect(() => {
     getPosts()
       .then((data) => {
         setPosts(data);
+        setPostsVisibles(data.slice(0, POSTS_POR_CARGA));
+        setIndiceCarga(POSTS_POR_CARGA);
         setLoading(false);
       })
       .catch((error) => {
@@ -45,6 +52,24 @@ export const Home = () => {
       .catch(() => {});
   }, []);
 
+  useEffect(() => {
+    const detectarScroll = () => {
+      const cercaDelFinal =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 200;
+
+      if (cercaDelFinal) {
+        cargarMasPosts();
+      }
+    };
+
+    window.addEventListener("scroll", detectarScroll);
+
+    return () => {
+      window.removeEventListener("scroll", detectarScroll);
+    };
+  }, [posts, indiceCarga, cargandoMas]);
+
   const postDestacado = useMemo(() => {
     if (posts.length === 0) return null;
     return posts.reduce((max, p) =>
@@ -67,6 +92,28 @@ export const Home = () => {
       ),
     );
   }, [postsRestantes, tagSeleccionado]);
+
+  const cargarMasPosts = () => {
+    if (cargandoMas || indiceCarga >= posts.length) return;
+
+    setCargandoMas(true);
+
+    setTimeout(() => {
+      const nuevosPosts = posts.slice(
+        indiceCarga,
+        indiceCarga + POSTS_POR_CARGA
+      );
+
+      setPostsVisibles((prev) => [
+        ...prev,
+        ...nuevosPosts,
+      ]);
+
+      setIndiceCarga((prev) => prev + POSTS_POR_CARGA);
+      setCargandoMas(false);
+
+    }, 700);
+  };
 
   if (loading) {
     return (
@@ -176,9 +223,29 @@ export const Home = () => {
                 No hay publicaciones todavía. ¡Sé el primero en postear!
               </div>
             ) : (
-              postsFiltrados.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))
+              postsVisibles
+                .filter((post) => {
+                  if (!tagSeleccionado) return true;
+
+                  return post.tags?.some(
+                    (tag) =>
+                      tag.nombre.toLowerCase() ===
+                      tagSeleccionado.toLowerCase()
+                  );
+                })
+                .map((post) => (
+                  <PostCard key={post.id} post={post} />
+                ))
+            )}
+            {cargandoMas && (
+              <div className="flex flex-col items-center justify-center py-8 text-gray-500 dark:text-gray-400">
+                <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3" />
+
+                <p className="font-medium">
+                  Cargando más publicaciones...
+                </p>
+
+              </div>
             )}
           </section>
         </section>
