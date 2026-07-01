@@ -80,6 +80,7 @@ export async function getPostsByUser(userId: string | number): Promise<Post[]> {
 export async function createPost(data: {
   descripcion: string;
   userNickname: string;
+  tagIds?: number[];
 }) {
   const res = await fetch(`${API_URL}/posts`, {
     method: "POST",
@@ -95,7 +96,6 @@ export async function createPost(data: {
     throw new Error(
       error.message || "No se pudo crear la publicación"
     );
-
   }
 
   return res.json();
@@ -139,4 +139,15 @@ export async function createTag(data: {
 
 
   return res.json();
+}
+
+export async function getTags(){
+
+  const res = await fetch(`${API_URL}/tags`);
+
+  if(!res.ok)
+    throw new Error("Error obteniendo tags");
+
+  return res.json();
+
 }

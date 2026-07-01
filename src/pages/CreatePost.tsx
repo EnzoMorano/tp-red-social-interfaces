@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/userContext";
-import { createPost, createPostImages, createTag } from "../services/api";
+import { createPost, createPostImages,createTag, getTags } from "../services/api";
 
 
 export default function CreatePost() {
@@ -10,11 +10,33 @@ export default function CreatePost() {
   const navigate = useNavigate();
 
   const [descripcion, setDescripcion] = useState("");
-  const [imagen, setImagen] = useState("");
+  const [imagenes, setImagenes] = useState([""]);
   const [tags, setTags] = useState("");
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
 
+
+  function cambiarImagen(index: number, valor: string) {
+    const nuevas = [...imagenes];
+    nuevas[index] = valor;
+
+    if (valor.trim() && index === imagenes.length - 1) {
+      nuevas.push("");
+    }
+
+    setImagenes(nuevas);
+  }
+
+
+  function eliminarImagen(index: number) {
+    const nuevas = imagenes.filter((_, i) => i !== index);
+
+    if (nuevas.length === 0) {
+      nuevas.push("");
+    }
+
+    setImagenes(nuevas);
+  }
 
   async function enviarPost(e: React.FormEvent<HTMLFormElement>) {
 
@@ -33,39 +55,57 @@ export default function CreatePost() {
 
     try {
 
-      const postCreado = await createPost({
-        descripcion: descripcion.trim(),
-        userNickname: user.nickname
-      });
+      let tagIds:number[] = [];
 
 
-      if (imagen.trim()) {
-
-        await createPostImages({
-          URL: imagen.trim(),
-          postId: postCreado.id
-        });
-
-      }
-
-
-      if (tags.trim()) {
+      if(tags.trim()){
 
         const listaTags = tags
           .split(",")
           .map(tag => tag.trim())
           .filter(Boolean);
 
+        const tagsExistentes = await getTags();
 
-        for (const tag of listaTags) {
+        for(const nombre of listaTags){
 
-          await createTag({
-            nombre: tag
-          });
+          let tag = tagsExistentes.find(
+            (t:any)=>t.nombre === nombre
+          );
 
+          if(!tag){
+            tag = await createTag({
+              nombre
+            });
+          }
+
+          tagIds.push(tag.id);
         }
+      }
+
+
+
+      const postCreado = await createPost({
+        descripcion: descripcion.trim(),
+        userNickname: user.nickname,
+        tagIds
+
+      });
+
+
+      const imagenesValidas = imagenes.filter(img => img.trim());
+
+
+      for (const img of imagenesValidas) {
+
+        await createPostImages({
+          URL: img.trim(),
+          postId: postCreado.id
+        });
 
       }
+
+
 
 
     navigate("/");
@@ -148,32 +188,56 @@ export default function CreatePost() {
 
             />
 
-            <input
+            <div className="space-y-3">
 
-            type="text"
+              {imagenes.map((imagen, index) => (
 
-            placeholder="URL de imagen"
+                <div key={index} className="flex gap-2">
 
-            value={imagen}
+                  <input
+                    type="text"
+                    placeholder={`URL de imagen ${index + 1}`}
+                    value={imagen}
+                    onChange={(e)=>{
+                      cambiarImagen(index, e.target.value);
+                    }}
+                    className="
+                    flex-1
+                    rounded-lg
+                    border
+                    border-gray-300
+                    dark:border-gray-600
+                    bg-white
+                    dark:bg-gray-900
+                    text-gray-900
+                    dark:text-white
+                    p-3
+                    "
+                  />
 
-            onChange={(e)=>{
-              setImagen(e.target.value);
-            }}
 
-            className="
-            w-full
-            rounded-lg
-            border
-            border-gray-300
-            dark:border-gray-600
-            bg-white
-            dark:bg-gray-900
-            text-gray-900
-            dark:text-white
-            p-3
-            "
+                  {imagenes.length > 1 && (
 
-            />
+                    <button
+                      type="button"
+                      onClick={()=> eliminarImagen(index)}
+                      className="
+                      px-3
+                      bg-red-500
+                      text-white
+                      rounded-lg
+                      "
+                    >
+                      X
+                    </button>
+
+                  )}
+
+                </div>
+
+              ))}
+
+            </div>
 
             <input
 
