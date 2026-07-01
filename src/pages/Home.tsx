@@ -4,12 +4,13 @@ import type { Post } from "../interfaces/types";
 import { getPosts, getUsers  } from "../services/api";
 import { PostCard } from "../components/PostCard";
 import { BannerBienvenida } from "../components/BannerBienvenida";
+import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [usersCount, setUsersCount] = useState<number>(0);
-  
+  const navigate = useNavigate();
 
   useEffect(() => {
     getPosts()
@@ -142,10 +143,11 @@ export const Home = () => {
           las normas de la comunidad.
         </p>
 
-        <button
-          className="  mt-3  text-sm  text-blue-600  hover:text-blue-800  font-semibold">
+      <button
+        onClick={() => navigate("/privacidad")}
+        className=" mt-3 text-sm text-blue-600 hover:text-blue-800 font-semibold cursor-pointer">
           Ver políticas →
-        </button>
+      </button>
       </div>
     </aside>
 

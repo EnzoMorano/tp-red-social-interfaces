@@ -11,6 +11,7 @@ import Search from "./pages/Search";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import CreatePost from "./pages/CreatePost";
 import { PublicRoute } from "./components/publicRoute";
+import Privacy from "./pages/Privacidad";
 
 function App() {
   return (
@@ -62,6 +63,11 @@ function App() {
           }
         />
         <Route path="/" element={<Home />} />
+
+        <Route 
+          path="/privacidad"
+          element={<Privacy />}
+        />
       </Routes>
       <Footer /> {/* Se mantiene fijo en todas las páginas */}
     </>
