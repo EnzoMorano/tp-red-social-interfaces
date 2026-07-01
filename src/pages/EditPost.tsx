@@ -88,7 +88,9 @@ export default function EditPost() {
       await updatePost(Number(id), { descripcion: descripcion.trim() });
 
       const imagenesValidas = imagenes.filter(
-        (img) => img.trim() && !post.images?.some((i) => (i.url || i.URL) === img.trim()),
+        (img) =>
+          img.trim() &&
+          !post.images?.some((i) => (i.url || i.URL) === img.trim()),
       );
       for (const img of imagenesValidas) {
         await createPostImages({ URL: img.trim(), postId: Number(id) });
@@ -98,9 +100,7 @@ export default function EditPost() {
       for (const oldTag of post.tags || []) {
         try {
           await unlinkTagFromPost(Number(id), oldTag.id);
-        } catch {
-          // ignore if already unlinked
-        }
+        } catch {}
       }
       if (tags.trim()) {
         const listaTags = tags
@@ -119,9 +119,7 @@ export default function EditPost() {
           if (tagId) {
             try {
               await linkTagToPost(Number(id), tagId);
-            } catch {
-              // ignore if already linked
-            }
+            } catch {}
           }
         }
       }
@@ -137,7 +135,9 @@ export default function EditPost() {
   if (cargandoDatos) {
     return (
       <div className="flex justify-center items-center min-h-[50vh] bg-gray-50 dark:bg-gray-950">
-        <p className="text-gray-500 dark:text-gray-400 font-medium animate-pulse">Cargando publicación...</p>
+        <p className="text-gray-500 dark:text-gray-400 font-medium animate-pulse">
+          Cargando publicación...
+        </p>
       </div>
     );
   }
@@ -146,8 +146,13 @@ export default function EditPost() {
     return (
       <main className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8 px-4">
         <div className="max-w-lg mx-auto text-center p-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
-          <p className="text-red-500 font-semibold">No tenés permiso para editar esta publicación.</p>
-          <button onClick={() => navigate(`/post/${id}`)} className="mt-4 text-sm text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
+          <p className="text-red-500 font-semibold">
+            No tenés permiso para editar esta publicación.
+          </p>
+          <button
+            onClick={() => navigate(`/post/${id}`)}
+            className="mt-4 text-sm text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+          >
             Volver a la publicación
           </button>
         </div>
@@ -166,19 +171,26 @@ export default function EditPost() {
         </button>
 
         <section className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Editar publicación</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+            Editar publicación
+          </h1>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <textarea
               value={descripcion}
-              onChange={(e) => { setDescripcion(e.target.value); setError(""); }}
+              onChange={(e) => {
+                setDescripcion(e.target.value);
+                setError("");
+              }}
               rows={6}
               placeholder="¿Qué estás pensando?"
               className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-4 outline-none focus:ring-2 focus:ring-blue-500"
             />
 
             <div className="space-y-3">
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Imágenes</p>
+              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Imágenes
+              </p>
 
               {post.images?.map((img, i) => {
                 const src = (img.url || img.URL || "").startsWith("http")
@@ -186,7 +198,11 @@ export default function EditPost() {
                   : `${API_URL}${img.url || img.URL}`;
                 return (
                   <div key={i} className="flex items-center gap-2">
-                    <img src={src} alt="" className="w-12 h-12 rounded object-cover shrink-0" />
+                    <img
+                      src={src}
+                      alt=""
+                      className="w-12 h-12 rounded object-cover shrink-0"
+                    />
                     <span className="text-xs text-gray-500 dark:text-gray-400 truncate flex-1">
                       {img.url || img.URL}
                     </span>
