@@ -213,13 +213,9 @@ export async function createTag(data: {
   return res.json();
 }
 
-export async function getTags(){
-
+export async function getTags() {
   const res = await fetch(`${API_URL}/tags`);
-
-  if(!res.ok)
-    throw new Error("Error obteniendo tags");
-
-  return res.json();
-
+  if (!res.ok) throw new Error("Error obteniendo tags");
+  const data = await res.json();
+  return data.tags ?? data;
 }

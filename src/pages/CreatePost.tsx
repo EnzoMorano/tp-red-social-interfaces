@@ -71,15 +71,23 @@ export default function CreatePost() {
         const tagsExistentes = await getTags();
 
         for (const nombre of listaTags) {
+          const nombreNormalizado = nombre.toLowerCase();
           let tag = tagsExistentes.find(
-            (t: any) => t.nombre.toLowerCase() === nombre.toLowerCase(),
+            (t: any) => (t.nombre || "").toLowerCase() === nombreNormalizado,
           );
 
           if (!tag) {
             tag = await createTag({ nombre });
           }
 
-          await linkTagToPost(postCreado.id, tag.id);
+          const tagId = tag?.id ?? tag?.tagId;
+          if (!tagId) {
+            setError(`No se pudo obtener el ID del tag "${nombre}"`);
+            setCargando(false);
+            return;
+          }
+
+          await linkTagToPost(postCreado.id, tagId);
         }
       }
 
