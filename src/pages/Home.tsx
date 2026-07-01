@@ -10,7 +10,9 @@ export const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [usersCount, setUsersCount] = useState<number>(0);
+  const [tagSeleccionado, setTagSeleccionado] = useState<string | null>(null);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     getPosts()
@@ -46,6 +48,19 @@ export const Home = () => {
     return posts.filter((p) => p.id !== postDestacado.id);
   }, [posts, postDestacado]);
 
+  const postsFiltrados = useMemo(() => {
+    if (!tagSeleccionado) {
+      return postsRestantes;
+    }
+    return postsRestantes.filter((post) =>
+      post.tags?.some(
+        (tag) =>
+          tag.nombre.toLowerCase() ===
+          tagSeleccionado.toLowerCase()
+      )
+    );
+  }, [postsRestantes, tagSeleccionado]);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[50vh] bg-gray-50 dark:bg-gray-950">
@@ -55,6 +70,8 @@ export const Home = () => {
       </div>
     );
   }
+
+
 
   return (
       <main className="bg-gray-50 dark:bg-gray-950 min-h-screen py-8 px-4">
@@ -66,8 +83,6 @@ export const Home = () => {
     <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
       UNaHur Anti-Social Net
     </h2>
-
-
     <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
       Una comunidad para compartir ideas,
       publicaciones y conectar con otros usuarios.
@@ -78,7 +93,6 @@ export const Home = () => {
         <span className="text-gray-500" dark:text-gray-400>
           Usuarios
         </span>
-
         <span className="font-bold text-gray-900 dark:text-white">
           {usersCount}
         </span>
@@ -88,32 +102,60 @@ export const Home = () => {
         <span className="text-gray-500 dark:text-gray-400">
           Posts
         </span>
-
         <span className="font-bold text-gray-900 dark:text-white">
           {posts.length}
         </span>
       </div>
     </div>
 
-
       {/* Sobre / tendencias */}
       <div>
-        <h2 className=" font-bold text-lg text-gray-900  dark:text-white  mb-3">
+        <h2 className="font-bold text-lg text-gray-900 dark:text-white  mb-1">
           🔥 Tendencias
         </h2>
+        {tagSeleccionado && (
+          <button
+          onClick={() => setTagSeleccionado(null)}
+          className="text-sm text-blue-600 font-semibold mb-3 cursor-pointer">
+          Ver todos
+          </button>
+          )}
         <div className="flex flex-wrap gap-2">
-          <span className="  bg-blue-100 dark:bg-blue-900  text-blue-700 dark:text-blue-200 px-3 py-1 rounded-full text-sm">
+          <button
+            onClick={() =>
+              setTagSeleccionado("programacion")
+            }
+            className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-3 py-1 rounded-full text-sm transition hover:scale-105 cursor-pointer">
             #programacion
-          </span>
-          <span className="  bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200  px-3 py-1 rounded-full text-sm">
+          </button>
+         <button
+            onClick={() =>
+              setTagSeleccionado("universidad")
+            }
+            className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-3 py-1 rounded-full text-sm transition hover:scale-105 cursor-pointer">
             #universidad
-          </span>
-          <span className=" bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-3 py-1 rounded-full  text-sm">
+          </button>
+          <button
+            onClick={() =>
+              setTagSeleccionado("musica")
+            }
+            className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-3 py-1 rounded-full text-sm transition hover:scale-105 cursor-pointer">
             #musica
-          </span>
-          <span className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-3 py-1 rounded-full text-sm">
+          </button>
+            <button
+            onClick={() =>
+              setTagSeleccionado("viajes")
+            }
+            className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-3 py-1 rounded-full text-sm transition hover:scale-105 cursor-pointer">
             #viajes
-          </span>
+          </button>
+          <button
+            onClick={() =>
+              setTagSeleccionado("ciudad")
+            }
+            className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-3 py-1 rounded-full text-sm transition hover:scale-105 cursor-pointer">
+            #ciudad
+          </button>
         </div>
       </div>
 
@@ -182,12 +224,19 @@ export const Home = () => {
               Publicaciones recientes
           </h2>
 
+          {tagSeleccionado && (
+
+          <p className="px-2 mb-3 text-sm text-blue-600 dark:text-blue-400">
+             Filtrando por #{tagSeleccionado}
+          </p>
+          )}
+
           {postsRestantes.length === 0 && !postDestacado ? (
             <div className="text-center p-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 text-gray-500 dark:text-gray-400 shadow-sm">
               No hay publicaciones todavía. ¡Sé el primero en postear!
             </div>
           ) : (
-            postsRestantes.map((post) => <PostCard key={post.id} post={post} />)
+            postsFiltrados.map((post) => <PostCard key={post.id} post={post} />)
           )}
         </section>
             </section>
