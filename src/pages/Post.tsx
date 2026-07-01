@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useUser } from "../context/userContext";
 import type { Post } from "../interfaces/types";
 import { createComment, getPostById } from "../services/api";
@@ -254,9 +254,12 @@ export default function Post() {
               </button>
             </form>
           ) : (
-            <p className="text-gray-500 dark:text-gray-400">
+            <Link
+              to="/login"
+              className="text-blue-600 dark:text-blue-400 hover:underline"
+            >
               Iniciá sesión para comentar.
-            </p>
+            </Link>
           )}
         </section>
       </div>

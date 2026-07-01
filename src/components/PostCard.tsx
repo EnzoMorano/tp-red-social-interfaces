@@ -44,12 +44,20 @@ export const PostCard = ({ post, featured }: PostCardProps) => {
         <div className="flex-1">
           <Link to={`/post/${post.id}`} className="block">
             <div className="flex items-center gap-2 mb-1">
-              <span className="font-bold text-gray-900 dark:text-gray-100 text-[15px]">
+              <Link
+                to={`/profile/${nicknameValido.toLowerCase()}`}
+                onClick={(e) => e.stopPropagation()}
+                className="font-bold text-gray-900 dark:text-gray-100 text-[15px] hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              >
                 {nicknameValido}
-              </span>
-              <span className="text-gray-500 dark:text-gray-400 text-sm">
+              </Link>
+              <Link
+                to={`/profile/${nicknameValido.toLowerCase()}`}
+                onClick={(e) => e.stopPropagation()}
+                className="text-gray-500 dark:text-gray-400 text-sm hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              >
                 @{nicknameValido.toLowerCase()}
-              </span>
+              </Link>
               {post.fecha && (
                 <span className="text-gray-400 dark:text-gray-500 text-xs ml-auto">
                   {new Date(post.fecha).toLocaleString("es-AR", {

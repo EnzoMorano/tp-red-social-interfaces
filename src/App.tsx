@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import { Home } from "./pages/Home";
 import Post from "./pages/Post";
 import Profile from "./pages/Profile";
+import Search from "./pages/Search";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import CreatePost from "./pages/CreatePost";
 import { PublicRoute } from "./components/publicRoute";
@@ -43,8 +44,17 @@ function App() {
         />
 
         <Route path="/post/:id" element={<Post />} />
+        <Route path="/search" element={<Search />} />
         <Route
           path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/:nickname"
           element={
             <ProtectedRoute>
               <Profile />

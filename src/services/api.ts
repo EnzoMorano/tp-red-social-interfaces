@@ -127,6 +127,46 @@ export async function createPostImages(data: {
 }
 
 
+// ------------------
+// Followers
+export async function followUser(userId: number, seguidorId: number) {
+  const res = await fetch(`${API_URL}/users/${userId}/follow`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ seguidorId }),
+  });
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "No se pudo seguir al usuario");
+  }
+  return res.json();
+}
+
+export async function unfollowUser(userId: number, seguidorId: number) {
+  const res = await fetch(`${API_URL}/users/${userId}/follow`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ seguidorId }),
+  });
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "No se pudo dejar de seguir");
+  }
+  return res.json();
+}
+
+export async function getFollowers(userId: number) {
+  const res = await fetch(`${API_URL}/users/${userId}/followers`);
+  if (!res.ok) throw new Error("Error al obtener seguidores");
+  return res.json();
+}
+
+export async function getFollowing(userId: number) {
+  const res = await fetch(`${API_URL}/users/${userId}/following`);
+  if (!res.ok) throw new Error("Error al obtener seguidos");
+  return res.json();
+}
+
 export async function createTag(data: {
   nombre: string;
 }) {
